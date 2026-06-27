@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Progres Kelapa Genjah</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --tanah: #EFE9D6;
+    --tanah-deep: #E3DBC2;
+    --hijau-tua: #28401E;
+    --hijau-daun: #4C7A33;
+    --hijau-segar: #7FA650;
+    --coklat-kering: #8B5E34;
+    --coklat-deep: #6B4524;
+    --kuning: #D4A537;
+    --kuning-deep: #B5862A;
+    --kertas: #FBF8EE;
+    --garis: rgba(40, 64, 30, 0.16);
+    --teks: #2A2620;
+    --teks-redup: #6B6452;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--tanah);
+    color: var(--teks);
+    font-family: 'Inter', sans-serif;
+    overscroll-behavior-y: contain;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse at top right, rgba(127,166,80,0.10), transparent 55%),
+      radial-gradient(ellipse at bottom left, rgba(139,94,52,0.08), transparent 50%);
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 16px 100px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    padding: 28px 16px 18px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hijau-daun);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--hijau-segar);
+    box-shadow: 0 0 0 3px rgba(127,166,80,0.25);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 7vw, 40px);
+    line-height: 1.05;
+    margin: 8px 0 4px;
+    color: var(--hijau-tua);
+    letter-spacing: -0.01em;
+  }
+
+  .sub {
+    font-size: 14px;
+    color: var(--teks-redup);
+    margin: 0;
+  }
+
+  /* ---------- RINGKASAN ---------- */
+  .ringkasan {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 10px;
+    margin: 22px 16px 0;
+    max-width: 720px;
+  }
+  @media (min-width: 600px) { .ringkasan { margin: 22px auto 0; } }
+
+  .kotak-ringkas {
+    background: var(--kertas);
+    border-radius: 14px;
+    padding: 14px 14px 12px;
+    border: 1px solid var(--garis);
+  }
+
+  .progress-track {
+    height: 8px;
+    background: var(--tanah-deep);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--hijau-segar), var(--kuning));
+    border-radius: 5px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+
+  .ringkas-angka {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--hijau-tua);
+    line-height: 1;
+  }
+  .kotak-ringkas.mati .ringkas-angka { color: var(--coklat-deep); }
+  .kotak-ringkas.baris .ringkas-angka { color: var(--hijau-tua); }
+
+  .ringkas-label {
+    font-size: 11px;
+    color: var(--teks-redup);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- DAFTAR BARIS ---------- */
+  .daftar-baris {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .baris-card {
+    background: var(--kertas);
+    border-radius: 16px;
+    border: 1px solid var(--garis);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease;
+  }
+  .baris-card.selesai {
+    box-shadow: 0 0 0 1.5px rgba(127,166,80,0.45) inset;
+  }
+
+  .baris-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 12px 4px;
+  }
+
+  .baris-nomor {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--hijau-tua);
+    width: 22px;
+    flex-shrink: 0;
+  }
+
+  .baris-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--teks-redup);
+    flex: 1;
+  }
+
+  .ceklis-bulat {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--garis);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
+    background: var(--tanah);
+    cursor: pointer;
+  }
+  .ceklis-bulat.aktif {
+    background: var(--hijau-daun);
+    border-color: var(--hijau-daun);
+    transform: scale(1.05);
+  }
+  .ceklis-bulat svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--kertas);
+    stroke-width: 3;
+    fill: none;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s ease 0.05s;
+  }
+  .ceklis-bulat.aktif svg { opacity: 1; transform: scale(1); }
+
+  /* ---------- GRID POHON (selalu terbuka, 1 baris x 10) ---------- */
+  .pohon-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    padding: 8px 12px 14px;
+  }
+
+  .pohon-sel {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 1.5px solid var(--garis);
+    background: var(--tanah);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--teks-redup);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.18s cubic-bezier(.34,1.56,.64,1);
+    min-width: 0;
+  }
+  .pohon-sel:active { transform: scale(0.88); }
+
+  .pohon-sel.hidup-sel {
+    background: var(--hijau-daun);
+    border-color: var(--hijau-daun);
+    color: var(--kertas);
+  }
+  .pohon-sel.hidup-sel span { opacity: 0.85; }
+
+  .pohon-sel.mati-sel {
+    background: var(--coklat-deep);
+    border-color: var(--coklat-deep);
+  }
+  .pohon-sel.mati-sel span { opacity: 0; }
+  .pohon-sel.mati-sel::after {
+    content: '✕';
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--tanah);
+    position: absolute;
+  }
+
+  .legenda {
+    display: flex;
+    gap: 16px;
+    padding: 0 12px 12px;
+    font-size: 10.5px;
+    color: var(--teks-redup);
+  }
+  .legenda span { display: flex; align-items: center; gap: 5px; }
+  .legenda i {
+    width: 12px; height: 12px; border-radius: 4px; display: inline-block;
+  }
+  .legenda .i-tumbuh { background: var(--hijau-daun); }
+  .legenda .i-mati { background: var(--coklat-deep); }
+  .legenda .i-kosong { background: var(--tanah-deep); border: 1px solid var(--garis); }
+
+  /* ---------- FOOTER NOTE ---------- */
+  .catatan-bawah {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--teks-redup);
+    margin-top: 28px;
+    line-height: 1.6;
+    padding: 0 20px;
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 18px auto 0;
+    background: none;
+    border: 1px solid var(--garis);
+    color: var(--teks-redup);
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .reset-btn:active { background: var(--tanah-deep); }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--hijau-tua);
+    color: var(--kertas);
+    padding: 10px 18px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 50;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Catatan Lahan</div>
+  <h1>Kelapa Genjah</h1>
+  <p class="sub">100 pohon · jarak tanam 6×6 m · 10 baris × 10 pohon</p>
+</header>
+
+<div class="wrap">
+
+  <div class="ringkasan">
+    <div class="kotak-ringkas">
+      <div class="progress-track"><div class="progress-fill" id="fillBaris"></div></div>
+      <div class="ringkas-angka" id="angkaBaris">0/10</div>
+      <div class="ringkas-label">baris selesai dibersihkan</div>
+    </div>
+    <div class="kotak-ringkas">
+      <div class="ringkas-angka" id="angkaHidup">0</div>
+      <div class="ringkas-label">pohon hidup</div>
+    </div>
+    <div class="kotak-ringkas mati">
+      <div class="ringkas-angka" id="angkaMati">0</div>
+      <div class="ringkas-label">pohon mati</div>
+    </div>
+  </div>
+
+  <div class="daftar-baris" id="daftarBaris"></div>
+
+  <button class="reset-btn" id="resetBtn">Mulai ulang catatan</button>
+  <p class="catatan-bawah">Ketuk lingkaran di kanan tiap baris untuk ceklis baris selesai dibersihkan.<br>Ketuk kotak pohon untuk menandai yang mati (✕). Data tersimpan otomatis di HP ini.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const KEY = 'kelapa_genjah_progres_v1';
+  const JUMLAH_BARIS = 10;
+  const POHON_PER_BARIS = 10;
+
+  function muatData() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return null;
+  }
+
+  function dataAwal() {
+    const baris = [];
+    for (let b = 0; b < JUMLAH_BARIS; b++) {
+      baris.push({
+        selesai: false,
+        terbuka: false,
+        pohon: Array(POHON_PER_BARIS).fill('hidup') // 'hidup' | 'mati'
+      });
+    }
+    return { baris };
+  }
+
+  let data = muatData() || dataAwal();
+
+  function simpan() {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e) {}
+  }
+
+  function tampilkanToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
+  }
+
+  function render() {
+    const cont = document.getElementById('daftarBaris');
+    cont.innerHTML = '';
+
+    let barisSelesai = 0;
+    let totalHidup = 0;
+    let totalMati = 0;
+
+    data.baris.forEach((baris, bi) => {
+      if (baris.selesai) barisSelesai++;
+      baris.pohon.forEach(p => p === 'mati' ? totalMati++ : totalHidup++);
+
+      const card = document.createElement('div');
+      card.className = 'baris-card' + (baris.selesai ? ' selesai' : '');
+
+      const matiDiBaris = baris.pohon.filter(p => p === 'mati').length;
+      const statusText = matiDiBaris > 0 ? `Baris ${bi + 1} · ${matiDiBaris} mati` : `Baris ${bi + 1} · sehat`;
+
+      card.innerHTML = `
+        <div class="baris-head">
+          <div class="baris-nomor">${bi + 1}</div>
+          <div class="baris-status">${statusText}</div>
+          <div class="ceklis-bulat ${baris.selesai ? 'aktif' : ''}" data-ceklis="${bi}">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+        </div>
+        <div class="pohon-grid">
+          ${baris.pohon.map((p, pi) => `
+            <div class="pohon-sel ${p === 'mati' ? 'mati-sel' : 'hidup-sel'}" data-pohon="${bi}-${pi}">
+              <span>${pi + 1}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="legenda">
+          <span><i class="i-tumbuh"></i> Hidup</span>
+          <span><i class="i-mati"></i> Mati</span>
+        </div>
+      `;
+      cont.appendChild(card);
+    });
+
+    document.getElementById('angkaBaris').textContent = `${barisSelesai}/${JUMLAH_BARIS}`;
+    document.getElementById('fillBaris').style.width = `${(barisSelesai / JUMLAH_BARIS) * 100}%`;
+    document.getElementById('angkaHidup').textContent = totalHidup;
+    document.getElementById('angkaMati').textContent = totalMati;
+
+    cont.querySelectorAll('[data-ceklis]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(el.dataset.ceklis);
+        data.baris[idx].selesai = !data.baris[idx].selesai;
+        simpan();
+        render();
+        if (data.baris[idx].selesai) {
+          tampilkanToast(`Baris ${idx + 1} selesai dibersihkan 🌿`);
+        }
+      });
+    });
+
+    cont.querySelectorAll('[data-pohon]').forEach(el => {
+      el.addEventListener('click', () => {
+        const [bi, pi] = el.dataset.pohon.split('-').map(Number);
+        const sekarang = data.baris[bi].pohon[pi];
+        data.baris[bi].pohon[pi] = sekarang === 'mati' ? 'hidup' : 'mati';
+        simpan();
+        render();
+      });
+    });
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (confirm('Hapus semua catatan dan mulai dari awal lagi?')) {
+      data = dataAwal();
+      simpan();
+      render();
+      tampilkanToast('Catatan direset');
+    }
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
