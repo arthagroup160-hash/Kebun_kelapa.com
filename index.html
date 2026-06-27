@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BTN Agro — Platform Kebun Digital · Kaltim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Merah Putih Palette */
+  --merah:        #CC0000;
+  --merah2:       #E8001A;
+  --merah3:       #FF1A35;
+  --merah-tua:    #8B0000;
+  --merah-gelap:  #5C0000;
+  --putih:        #FFFFFF;
+  --putih2:       #F8F8F8;
+  --krem:         #FDF5F5;
+
+  /* IKN / Kaltim Gold */
+  --emas:         #C8962A;
+  --emas2:        #F0B429;
+  --emas3:        #FFD166;
+  --emas-muda:    #FFF0C0;
+
+  /* Hijau pendukung */
+  --hijau:        #1A4D2E;
+  --hijau2:       #2D7A52;
+  --hijau3:       #5AB082;
+
+  /* Netral */
+  --abu:          #F2F2F2;
+  --abu2:         #E5E5E5;
+  --abu3:         #CCCCCC;
+  --teks:         #1A0A0A;
+  --teks2:        #4A2020;
+  --teks3:        #8A6060;
+  --gelap:        #0D0505;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+
+html,body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--krem);
+  color: var(--teks);
+  min-height: 100vh;
+  overscroll-behavior-y: contain;
+}
+
+/* ══════════════════════════════
+   BOTTOM NAV — Merah Putih
+══════════════════════════════ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 500;
+  background: var(--gelap);
+  border-top: 2px solid var(--merah);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bn-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px 8px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  gap: 3px;
+  transition: background .15s;
+}
+
+.bn-item:active { background: rgba(204,0,0,0.15); }
+
+.bn-icon { font-size: 19px; line-height: 1; }
+
+.bn-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  transition: color .2s;
+}
+
+.bn-item.aktif .bn-label { color: var(--emas2); }
+.bn-item.aktif .bn-icon { filter: drop-shadow(0 0 5px rgba(240,180,41,0.6)); }
+
+.page { display: none; padding-bottom: 88px; }
+.page.aktif { display: block; }
+
+/* ══════════════════════════════
+   PAGE 1 — BERANDA
+══════════════════════════════ */
+
+/* MASTHEAD */
+.masthead {
+  background: var(--gelap);
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Bendera merah putih pattern */
+.flag-stripe {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg,
+    var(--merah) 0%, var(--merah) 50%,
+    var(--putih) 50%, var(--putih) 100%
+  );
+  z-index: 3;
+}
+
+.masthead-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 10% 90%, rgba(204,0,0,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 80% at 90% 10%, rgba(200,150,42,0.15) 0%, transparent 50%);
+  z-index: 1;
+}
+
+/* IKN Symbol abstract */
+.ikn-symbol {
+  position: absolute;
+  right: -20px; top: 20px;
+  width: 180px; height: 180px;
+  z-index: 1;
+  opacity: 0.06;
+}
+
+.ikn-symbol svg { width: 100%; height: 100%; }
+
+/* Garis vertikal dekorasi */
+.masthead-lines {
+  position: absolute; inset: 0; z-index: 1;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 48px,
+    rgba(255,255,255,0.025) 48px,
+    rgba(255,255,255,0.025) 50px
+  );
+}
+
+.masthead-inner {
+  position: relative;
+  z-index: 2;
+  padding: 52px 20px 28px;
+}
+
+.ms-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--emas2);
+  margin-bottom: 14px;
+}
+
+.ms-tag::before {
+  content: '';
+  width: 28px; height: 2px;
+  background: var(--merah);
+}
+
+.ms-tag::after {
+  content: '';
+  width: 28px; height: 2px;
+  background: var(--merah);
+}
+
+.masthead h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(30px, 8vw, 50px);
+  font-weight: 900;
+  color: var(--putih);
+  line-height: 1.0;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.masthead h1 .aksen { color: var(--merah3); }
+.masthead h1 em { font-style: italic; color: var(--emas2); }
+
+.masthead-sub {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.65;
+  max-width: 360px;
+}
+
+.masthead-sub strong { color: rgba(255,255,255,0.75); }
+
+/* Merah putih divider */
+.mp-divider {
+  position: relative;
+  z-index: 2;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--merah) 0%,
+    var(--merah) 40%,
+    var(--putih) 40%,
+    var(--putih) 60%,
+    transparent 60%
+  );
+  margin-top: 20px;
+}
+
+/* IKN Badge strip */
+.ikn-strip {
+  background: var(--merah);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ikn-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+.ikn-sep { color: rgba(255,255,255,0.3); }
+
+.ikn-loc {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--putih);
+}
+
+/* Stat strip */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--putih);
+  border-bottom: 3px solid var(--merah);
+}
+
+.stat-cell {
+  padding: 14px 10px;
+  text-align: center;
+  border-right: 1px solid var(--abu2);
+}
+
+.stat-cell:last-child { border-right: none; }
+
+.sn {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--merah);
+  display: block;
+  line-height: 1;
+}
+
+.sl { font-size: 10px; color: var(--teks3); margin-top: 3px; line-height: 1.3; }
+
+/* ═══ WRAP ═══ */
+.beranda-wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+.sec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--teks3);
+  margin: 24px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sec-label::after { content:''; flex:1; height:1px; background:var(--abu2); }
+
+.sec-label .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--merah);
+  flex-shrink: 0;
+}
+
+/* MANIFESTO — militan */
+.manifesto {
+  background: var(--gelap);
+  border-radius: 14px;
+  padding: 20px 18px;
+  margin-bottom: 14px;
+  border-left: 4px solid var(--merah);
+  position: relative;
+  overflow: hidden;
+}
+
+.manifesto::before {
+  content: '"';
+  position: absolute;
+  top: -10px; left: 14px;
+  font-family: 'Fraunces', serif;
+  font-size: 120px;
+  color: rgba(204,0,0,0.12);
+  line-height: 1;
+}
+
+.manifesto-inner { position: relative; z-index: 1; }
+
+.manifesto-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--merah3);
+  margin-bottom: 10px;
+}
+
+.manifesto-text {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--putih);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.manifesto-text strong { color: var(--emas2); font-style: normal; }
+
+.manifesto-author {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* LAYANAN — grid militan */
+.layanan-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+
+.layanan-item {
+  background: var(--putih);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border: 1px solid var(--abu2);
+  border-left: 4px solid var(--merah);
+  position: relative;
+  overflow: hidden;
+}
+
+.li-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--merah);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+
+.li-body {}
+.li-title { font-size: 13px; font-weight: 700; color: var(--teks); margin-bottom: 3px; }
+.li-desc { font-size: 11px; color: var(--teks3); line-height: 1.5; }
+
+.li-badge {
+  position: absolute;
+  right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: var(--merah);
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* DIGITAL FEATURE — utama */
+.digital-block {
+  background: var(--merah-gelap);
+  border-radius: 14px;
+  padding: 0;
+  margin-bottom: 14px;
+  overflow: hidden;
+  border: 1px solid var(--merah-tua);
+}
+
+.db-head {
+  background: var(--merah);
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.db-head h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--putih);
+}
+
+.db-head p { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+.db-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--emas2);
+  background: rgba(0,0,0,0.3);
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.db-features {
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.dbf-item {
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.dbf-icon { font-size: 18px; margin-bottom: 4px; }
+.dbf-title { font-size: 12px; font-weight: 700; color: var(--putih); margin-bottom: 2px; }
+.dbf-desc { font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1.45; }
+
+/* POC PROMO */
+.poc-promo {
+  background: var(--putih);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  border: 1px solid var(--abu2);
+}
+
+.pp-head {
+  background: var(--hijau);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pp-head h3 { font-family: 'Fraunces',serif; font-size: 18px; font-weight: 700; color: var(--putih); }
+.pp-head p { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+.pp-body { padding: 14px 16px; }
+
+.pp-varian {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ppv-card {
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.ppv-o { background: var(--hijau); }
+.ppv-t { background: var(--merah-tua); }
+
+.ppv-name {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--putih);
+  margin-bottom: 4px;
+}
+
+.ppv-harga {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--emas2);
+  display: block;
+}
+
+.ppv-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+.pp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--abu2);
+  font-size: 12px;
+}
+
+.pp-row:last-child { border-bottom: none; }
+.pp-row .pl { color: var(--teks3); }
+.pp-row .pv { font-weight: 700; color: var(--hijau); font-family: 'JetBrains Mono',monospace; font-size: 11px; }
+
+/* CTA */
+.cta-merah {
+  background: var(--merah);
+  border-radius: 14px;
+  padding: 20px 16px;
+  text-align: center;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-merah::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 40%;
+  background: rgba(255,255,255,0.06);
+}
+
+.cta-merah h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--putih);
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-merah p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 14px;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--putih);
+  color: var(--merah);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 11px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-btn:active { opacity: .85; }
+
+/* Identitas */
+.identitas {
+  background: var(--gelap);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid rgba(204,0,0,0.3);
+}
+
+.id-logo {
+  width: 50px; height: 50px;
+  background: var(--merah);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.id-nama { font-size: 14px; font-weight: 700; color: var(--putih); margin-bottom: 3px; }
+.id-sk { font-family: 'JetBrains Mono',monospace; font-size: 10px; color: var(--emas2); letter-spacing: 1px; margin-bottom: 2px; }
+.id-sub { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+/* ══════════════════════════════
+   PAGE 2 — MONITORING KEBUN
+══════════════════════════════ */
+.monitor-masthead {
+  background: var(--gelap);
+  padding: 28px 16px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.monitor-masthead::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--merah) 0%, var(--merah) 50%, var(--putih) 50%, var(--putih) 100%);
+}
+
+.monitor-masthead::after {
+  content: '🌴';
+  position: absolute;
+  right: 16px; bottom: 4px;
+  font-size: 80px;
+  opacity: .07;
+}
+
+.mm-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--merah3);
+  margin-bottom: 8px;
+}
+
+.monitor-masthead h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(24px, 6vw, 36px);
+  font-weight: 700;
+  color: var(--putih);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.monitor-masthead h2 em { font-style:italic; color: var(--emas2); }
+.monitor-masthead p { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+/* STATS KEBUN */
+.kebun-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--abu2);
+  margin: 0;
+}
+
+.ks-cell {
+  background: var(--putih);
+  padding: 14px 16px;
+}
+
+.ks-cell .progress-track {
+  height: 6px;
+  background: var(--abu2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.ks-cell .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--merah), var(--merah3));
+  border-radius: 3px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+}
+
+.ks-angka {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--merah);
+  line-height: 1;
+  display: block;
+}
+
+.ks-angka.mati { color: var(--teks2); }
+.ks-angka.hidup { color: var(--hijau); }
+.ks-label { font-size: 11px; color: var(--teks3); margin-top: 3px; }
+
+/* Info strip kebun */
+.info-strip-kebun {
+  background: var(--merah);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 16px;
+}
+
+.isk-item { text-align: center; }
+.isk-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--putih);
+  display: block;
+}
+
+.isk-label { font-size: 9px; color: rgba(255,255,255,0.55); letter-spacing: 0.5px; margin-top: 1px; }
+
+.wrap-monitor { max-width: 720px; margin: 0 auto; padding: 0 14px; }
+
+.monitor-tip {
+  background: var(--putih);
+  border-left: 4px solid var(--merah);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 12px;
+  margin: 12px 0;
+  font-size: 11.5px;
+  color: var(--teks2);
+  line-height: 1.5;
+}
+
+/* Baris Cards */
+.daftar-baris { display: flex; flex-direction: column; gap: 8px; }
+
+.baris-card {
+  background: var(--putih);
+  border-radius: 12px;
+  border: 1px solid var(--abu2);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.baris-card.selesai {
+  border-color: var(--merah);
+  box-shadow: 0 0 0 1px rgba(204,0,0,0.2);
+}
+
+.baris-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px 4px;
+}
+
+.baris-nomor {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--merah);
+  width: 22px;
+  flex-shrink: 0;
+}
+
+.baris-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--teks3);
+  flex: 1;
+}
+
+.ceklis-bulat {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--abu3);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
+  background: var(--abu);
+  cursor: pointer;
+}
+
+.ceklis-bulat.aktif {
+  background: var(--merah);
+  border-color: var(--merah);
+  transform: scale(1.05);
+}
+
+.ceklis-bulat svg {
+  width: 14px; height: 14px;
+  stroke: white;
+  stroke-width: 3;
+  fill: none;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease 0.05s;
+}
+
+.ceklis-bulat.aktif svg { opacity: 1; transform: scale(1); }
+
+.pohon-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  padding: 6px 12px 12px;
+}
+
+.pohon-sel {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  border: 1.5px solid var(--abu2);
+  background: var(--abu);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--teks3);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s cubic-bezier(.34,1.56,.64,1);
+  min-width: 0;
+}
+
+.pohon-sel:active { transform: scale(0.85); }
+
+.pohon-sel.hidup-sel {
+  background: var(--hijau2);
+  border-color: var(--hijau2);
+  color: white;
+}
+
+.pohon-sel.hidup-sel span { opacity: 0.8; }
+
+.pohon-sel.mati-sel {
+  background: var(--merah-tua);
+  border-color: var(--merah-tua);
+}
+
+.pohon-sel.mati-sel span { opacity: 0; }
+
+.pohon-sel.mati-sel::after {
+  content: '✕';
+  font-weight: 700;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  position: absolute;
+}
+
+.legenda {
+  display: flex;
+  gap: 14px;
+  padding: 0 12px 10px;
+  font-size: 10px;
+  color: var(--teks3);
+}
+
+.legenda span { display: flex; align-items: center; gap: 5px; }
+.legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legenda .i-tumbuh { background: var(--hijau2); }
+.legenda .i-mati { background: var(--merah-tua); }
+
+/* ══════════════════════════════
+   PAGE 3 — LAPORAN
+══════════════════════════════ */
+.lap-masthead {
+  background: var(--gelap);
+  padding: 28px 16px 20px;
+  border-top: 4px solid;
+  border-image: linear-gradient(90deg, var(--merah) 0%, var(--merah) 50%, var(--putih) 50%, var(--putih) 100%) 1;
+}
+
+.lap-masthead h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--putih);
+  margin-bottom: 2px;
+}
+
+.lap-masthead p { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+.lap-wrap { max-width: 720px; margin: 0 auto; padding: 16px 16px 0; }
+
+/* Summary card */
+.lap-summary {
+  background: var(--merah);
+  border-radius: 14px;
+  padding: 18px 16px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.lap-summary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 80% at 100% 0%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+
+.ls-inner { position: relative; z-index: 1; }
+.ls-tag { font-family: 'JetBrains Mono',monospace; font-size: 9px; letter-spacing: 2px; text-transform:uppercase; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+.ls-pct { font-family: 'Fraunces',serif; font-size: 56px; font-weight: 900; color: var(--putih); line-height: 1; display: block; }
+.ls-desc { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+
+.ls-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.ls-cell {
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.lsn { font-family: 'JetBrains Mono',monospace; font-size: 18px; font-weight: 700; color: var(--putih); display: block; line-height: 1; }
+.lsl { font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 3px; letter-spacing: 0.5px; }
+
+/* Detail tabel */
+.lap-tabel {
+  background: var(--putih);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--abu2);
+  margin-bottom: 14px;
+}
+
+.lt-head {
+  display: grid;
+  grid-template-columns: 36px 1fr 50px 50px 50px;
+  background: var(--gelap);
+  padding: 9px 12px;
+  font-family: 'JetBrains Mono',monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+.lt-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 50px 50px 50px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--abu2);
+  font-size: 12px;
+  align-items: center;
+}
+
+.lt-row:last-child { border-bottom: none; }
+.lt-row:nth-child(even) { background: var(--krem); }
+.lt-num { font-family: 'Fraunces',serif; font-weight: 700; color: var(--merah); }
+
+/* Share buttons */
+.share-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 8px;
+}
+
+.sb-wa { background: #25D366; color: white; }
+.sb-copy { background: var(--gelap); color: white; }
+.share-btn:active { opacity: .85; }
+
+/* ══════════════════════════════
+   PAGE 4 — POC GUIDE
+══════════════════════════════ */
+.poc-masthead {
+  background: var(--hijau);
+  padding: 28px 16px 20px;
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid;
+  border-image: linear-gradient(90deg, var(--merah) 50%, var(--putih) 50%) 1;
+}
+
+.poc-masthead::after {
+  content: '🌿';
+  position: absolute;
+  right: 16px; bottom: 4px;
+  font-size: 80px;
+  opacity: .1;
+}
+
+.poc-masthead h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--putih);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.poc-masthead h2 em { font-style:italic; color: var(--emas2); }
+.poc-masthead p { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+.poc-wrap { max-width: 720px; margin: 0 auto; padding: 16px 16px 0; }
+
+/* Total POC */
+.total-poc {
+  background: var(--gelap);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  border: 1px solid rgba(204,0,0,0.3);
+}
+
+.tp-item {}
+.tp-label { font-family: 'JetBrains Mono',monospace; font-size: 9px; letter-spacing: 1.5px; text-transform:uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+.tp-num { font-family: 'Fraunces',serif; font-size: 26px; font-weight: 700; color: var(--emas2); line-height: 1; }
+.tp-sub { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+/* Fase cards */
+.fase-card {
+  background: var(--putih);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px solid var(--abu2);
+}
+
+.fase-head {
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.f1h { background: var(--gelap); border-left: 4px solid var(--merah); }
+.f2h { background: var(--hijau); border-left: 4px solid var(--emas2); }
+.f3h { background: linear-gradient(135deg,#3d1a00,#8b4513); border-left: 4px solid var(--emas2); }
+
+.fh-left {}
+.fh-tag { font-family: 'JetBrains Mono',monospace; font-size: 9px; letter-spacing: 1.5px; text-transform:uppercase; color: rgba(255,255,255,0.4); margin-bottom: 3px; }
+.fh-title { font-family: 'Fraunces',serif; font-size: 16px; font-weight: 700; color: var(--putih); }
+.fh-hari { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+.fh-btl { font-family: 'JetBrains Mono',monospace; font-size: 22px; font-weight: 700; color: var(--emas2); text-align: right; }
+.fh-btl span { display: block; font-size: 9px; color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform:uppercase; }
+
+.fase-body { padding: 12px 14px; }
+.fb-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--abu2); font-size: 12px; }
+.fb-row:last-child { border-bottom: none; }
+.fb-row .fl { color: var(--teks3); }
+.fb-row .fv { font-family: 'JetBrains Mono',monospace; font-size: 11px; font-weight: 700; color: var(--teks); }
+
+.fase-tip {
+  background: var(--emas-muda);
+  border-left: 3px solid var(--emas);
+  border-radius: 0 6px 6px 0;
+  padding: 8px 12px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #7a5000;
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════
+   SHARED
+══════════════════════════════ */
+.reset-btn {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: 1px solid var(--abu2);
+  color: var(--teks3);
+  font-size: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.reset-btn:active { background: var(--abu); }
+
+.catatan-bawah {
+  text-align: center;
+  font-size: 11px;
+  color: var(--teks3);
+  margin-top: 14px;
+  line-height: 1.6;
+  padding: 0 16px;
+}
+
+.info-box { border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; font-size: 11.5px; line-height: 1.6; }
+.info-box.merah { background: #FFF0F0; border-left: 3px solid var(--merah); color: var(--merah-tua); }
+.info-box.hijau { background: rgba(45,122,82,0.08); border-left: 3px solid var(--hijau2); color: var(--hijau); }
+.info-box.kuning { background: var(--emas-muda); border-left: 3px solid var(--emas); color: #7a5000; }
+
+.toast {
+  position: fixed;
+  bottom: 88px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--gelap);
+  color: white;
+  border: 1px solid var(--merah);
+  padding: 10px 18px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  white-space: nowrap;
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ════ BOTTOM NAV ════ -->
+<nav class="bottom-nav">
+  <button class="bn-item aktif" onclick="pindah('beranda',this)">
+    <span class="bn-icon">🏛️</span>
+    <span class="bn-label">BTN</span>
+  </button>
+  <button class="bn-item" onclick="pindah('monitor',this)">
+    <span class="bn-icon">🌴</span>
+    <span class="bn-label">Kebun</span>
+  </button>
+  <button class="bn-item" onclick="pindah('laporan',this)">
+    <span class="bn-icon">📊</span>
+    <span class="bn-label">Laporan</span>
+  </button>
+  <button class="bn-item" onclick="pindah('poc',this)">
+    <span class="bn-icon">🌿</span>
+    <span class="bn-label">POC</span>
+  </button>
+</nav>
+
+<!-- ════════════════════════════
+     PAGE 1 — BERANDA
+════════════════════════════ -->
+<div class="page aktif" id="page-beranda">
+
+  <div class="masthead">
+    <div class="flag-stripe"></div>
+    <div class="masthead-bg"></div>
+    <div class="masthead-lines"></div>
+
+    <!-- IKN Symbol SVG -->
+    <div class="ikn-symbol">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Abstraksi Garuda / IKN Nusantara -->
+        <path d="M100 20 L140 60 L160 120 L100 180 L40 120 L60 60 Z" stroke="white" stroke-width="3" fill="none"/>
+        <path d="M100 20 L100 180" stroke="white" stroke-width="2" opacity="0.5"/>
+        <path d="M60 60 L140 60" stroke="white" stroke-width="2" opacity="0.5"/>
+        <path d="M40 120 L160 120" stroke="white" stroke-width="2" opacity="0.5"/>
+        <circle cx="100" cy="100" r="20" stroke="white" stroke-width="2" fill="none"/>
+        <circle cx="100" cy="100" r="8" fill="white" opacity="0.5"/>
+        <!-- Sayap abstrak -->
+        <path d="M100 80 C70 70 40 80 30 100 C50 90 80 88 100 100" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M100 80 C130 70 160 80 170 100 C150 90 120 88 100 100" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="masthead-inner">
+      <div class="ms-tag">Bahula Tani Nusantara</div>
+      <h1>
+        Konseptor<br>
+        <span class="aksen">Kebun</span> Digital<br>
+        <em>Kalimantan</em>
+      </h1>
+      <p class="masthead-sub">
+        <strong>Bukan sekadar pengelola lahan.</strong><br>
+        BTN merancang, mengontrol, dan memantau kebun Anda secara digital — dari konsep hingga panen.
+      </p>
+      <div class="mp-divider"></div>
+    </div>
+  </div>
+
+  <!-- IKN Strip -->
+  <div class="ikn-strip">
+    <span class="ikn-badge">🏛️ IKN Corridor</span>
+    <span class="ikn-sep">·</span>
+    <span class="ikn-loc">Sepaku · Penajam Paser Utara · Kaltim</span>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-strip">
+    <div class="stat-cell">
+      <span class="sn">4+ Ha</span>
+      <div class="sl">Lahan aktif dikelola</div>
+    </div>
+    <div class="stat-cell">
+      <span class="sn">100%</span>
+      <div class="sl">Sistem organik digital</div>
+    </div>
+    <div class="stat-cell">
+      <span class="sn">Real‑time</span>
+      <div class="sl">Monitoring kebun</div>
+    </div>
+  </div>
+
+  <div class="beranda-wrap">
+
+    <!-- MANIFESTO -->
+    <div class="sec-label"><span class="dot"></span>Posisi BTN</div>
+    <div class="manifesto">
+      <div class="manifesto-inner">
+        <div class="manifesto-tag">— Pernyataan Posisi</div>
+        <div class="manifesto-text">
+          Kami tidak hanya turun ke lapangan.<br>
+          Kami <strong>merancang sistem kebun Anda</strong> secara menyeluruh — digital, terukur, dan terdokumentasi. Klien bisa pantau perkembangan dari mana saja.
+        </div>
+        <div class="manifesto-author">— Bahula Tani Nusantara · Kaltim Operations</div>
+      </div>
+    </div>
+
+    <!-- LAYANAN -->
+    <div class="sec-label"><span class="dot"></span>Layanan Utama</div>
+    <div class="layanan-list">
+
+      <div class="layanan-item">
+        <div class="li-num">01</div>
+        <div class="li-body">
+          <div class="li-title">Konsep & Perancangan Kebun</div>
+          <div class="li-desc">Tata letak lahan, jarak tanam, sistem pengairan, RAB lengkap, dan roadmap tanam hingga panen. Semua terstruktur sebelum satu pohon ditanam.</div>
+        </div>
+        <div class="li-badge">Core</div>
+      </div>
+
+      <div class="layanan-item">
+        <div class="li-num">02</div>
+        <div class="li-body">
+          <div class="li-title">Platform Monitoring Digital</div>
+          <div class="li-desc">Aplikasi web eksklusif per kebun. Klien bisa pantau setiap pohon, setiap baris, progres pekerjaan, dan laporan real-time dari HP.</div>
+        </div>
+        <div class="li-badge">Digital</div>
+      </div>
+
+      <div class="layanan-item">
+        <div class="li-num">03</div>
+        <div class="li-body">
+          <div class="li-title">Manajemen Nutrisi & Pupuk</div>
+          <div class="li-desc">Sistem pemupukan terencana berbasis POC NutraGro. Setiap fase tanam sudah terjadwal dan terdokumentasi — tidak ada yang terlewat.</div>
+        </div>
+        <div class="li-badge">POC</div>
+      </div>
+
+      <div class="layanan-item">
+        <div class="li-num">04</div>
+        <div class="li-body">
+          <div class="li-title">Kerjasama Bagi Hasil Syariah</div>
+          <div class="li-desc">Skema 50:50 yang transparan dan terdokumentasi. Pemilik modal cukup sediakan lahan dan modal — BTN kelola dan laporkan hasilnya secara berkala.</div>
+        </div>
+        <div class="li-badge">Syariah</div>
+      </div>
+
+      <div class="layanan-item">
+        <div class="li-num">05</div>
+        <div class="li-body">
+          <div class="li-title">Laporan Berkala & Share Instan</div>
+          <div class="li-desc">Laporan progres kebun bisa dikirim langsung via WhatsApp satu klik — lengkap dengan data pohon, baris, dan persentase kemajuan.</div>
+        </div>
+        <div class="li-badge">Laporan</div>
+      </div>
+
+    </div>
+
+    <!-- DIGITAL FEATURE -->
+    <div class="sec-label"><span class="dot"></span>Kenapa Digital?</div>
+    <div class="digital-block">
+      <div class="db-head">
+        <div>
+          <h3>Kebun Terkontrol Penuh</h3>
+          <p>Setiap pohon tercatat. Setiap baris terpantau. Tidak ada yang luput.</p>
+        </div>
+        <div class="db-tag">Platform</div>
+      </div>
+      <div class="db-features">
+        <div class="dbf-item">
+          <div class="dbf-icon">📍</div>
+          <div class="dbf-title">Peta Pohon Digital</div>
+          <div class="dbf-desc">Setiap pohon punya status — hidup, mati, atau perlu perhatian.</div>
+        </div>
+        <div class="dbf-item">
+          <div class="dbf-icon">📊</div>
+          <div class="dbf-title">Progress Real-time</div>
+          <div class="dbf-desc">Persentase kemajuan kebun diperbarui otomatis setiap ada update.</div>
+        </div>
+        <div class="dbf-item">
+          <div class="dbf-icon">📤</div>
+          <div class="dbf-title">Kirim Laporan 1 Klik</div>
+          <div class="dbf-desc">Laporan lengkap langsung ke WhatsApp klien — tanpa ketik manual.</div>
+        </div>
+        <div class="dbf-item">
+          <div class="dbf-icon">🔒</div>
+          <div class="dbf-title">Data Tersimpan Aman</div>
+          <div class="dbf-desc">Data tersimpan di perangkat — tidak hilang meski tidak ada internet.</div>
+        </div>
+        <div class="dbf-item">
+          <div class="dbf-icon">📅</div>
+          <div class="dbf-title">Jadwal Pemupukan</div>
+          <div class="dbf-desc">Panduan aplikasi POC per fase tanam sudah terjadwal dan terdokumentasi.</div>
+        </div>
+        <div class="dbf-item">
+          <div class="dbf-icon">🌐</div>
+          <div class="dbf-title">Akses dari Mana Saja</div>
+          <div class="dbf-desc">Klien pantau kebun dari Jakarta, Surabaya, atau luar negeri — cukup buka HP.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POC -->
+    <div class="sec-label"><span class="dot"></span>Produk Pertanian BTN</div>
+    <div class="poc-promo">
+      <div class="pp-head">
+        <div>
+          <h3>NutraGro POC</h3>
+          <p>Pupuk Organik Cair N-Tinggi · Produksi BTN</p>
+        </div>
+      </div>
+      <div class="pp-body">
+        <div class="pp-varian">
+          <div class="ppv-card ppv-o">
+            <div class="ppv-name">Organik</div>
+            <span class="ppv-harga">Rp 40K</span>
+            <div class="ppv-sub">N 9–11% · 100% organik</div>
+          </div>
+          <div class="ppv-card ppv-t">
+            <div class="ppv-name">Turbo</div>
+            <span class="ppv-harga">Rp 35K</span>
+            <div class="ppv-sub">N 12–15% · Efek 3–5 hari</div>
+          </div>
+        </div>
+        <div class="pp-row"><span class="pl">Stok tersedia</span><span class="pv">450 botol — ready</span></div>
+        <div class="pp-row"><span class="pl">Pengiriman ke Kaltim</span><span class="pv">H+2 setelah bayar</span></div>
+        <div class="pp-row"><span class="pl">Lebih hemat vs NASA/Hantu</span><span class="pv">42% lebih murah</span></div>
+        <div class="pp-row"><span class="pl">Cocok lahan baru Kaltim</span><span class="pv">✅ Bangun biota tanah</span></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-merah">
+      <h3>Konsultasi Kebun Anda</h3>
+      <p>Ceritakan lahan dan target Anda. BTN siapkan konsep, RAB, dan sistem monitoring digitalnya.</p>
+      <a class="cta-btn" href="https://wa.me/6283871666136?text=Halo%20BTN%2C%20saya%20ingin%20konsultasi%20konsep%20kebun%20di%20Kaltim">
+        💬 Hubungi BTN Sekarang
+      </a>
+    </div>
+
+    <!-- Identitas -->
+    <div class="identitas">
+      <div class="id-logo">🌿</div>
+      <div>
+        <div class="id-nama">Bahula Tani Nusantara</div>
+        <div class="id-sk">SK · 141.1/18/XI/2021</div>
+        <div class="id-sub">
+          Sukabumi HQ · Operasional Kaltim (IKN Corridor)<br>
+          WA: 083871666136
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 2 — MONITORING
+════════════════════════════ -->
+<div class="page" id="page-monitor">
+
+  <div class="monitor-masthead">
+    <div class="mm-tag">🌴 Monitoring Real-time</div>
+    <h2>Kelapa Genjah<br><em>Kaltim</em></h2>
+    <p>100 pohon · jarak 6×6m · 10 baris × 10 pohon</p>
+  </div>
+
+  <div class="kebun-stats">
+    <div class="ks-cell">
+      <div class="progress-track"><div class="progress-fill" id="fillBaris"></div></div>
+      <span class="ks-angka" id="angkaBaris">0/10</span>
+      <div class="ks-label">Baris selesai digarap</div>
+    </div>
+    <div class="ks-cell">
+      <span class="ks-angka hidup" id="angkaHidup">0</span>
+      <div class="ks-label">Pohon hidup</div>
+    </div>
+    <div class="ks-cell">
+      <span class="ks-angka mati" id="angkaMati">0</span>
+      <div class="ks-label">Pohon mati</div>
+    </div>
+    <div class="ks-cell">
+      <span class="ks-angka" id="angkaPct" style="color:var(--merah)">0%</span>
+      <div class="ks-label">Progress total</div>
+    </div>
+  </div>
+
+  <div class="info-strip-kebun">
+    <div class="isk-item"><span class="isk-val">100</span><div class="isk-label">Total Pohon</div></div>
+    <div class="isk-item"><span class="isk-val">10</span><div class="isk-label">Baris</div></div>
+    <div class="isk-item"><span class="isk-val">6×6m</span><div class="isk-label">Jarak Tanam</div></div>
+    <div class="isk-item"><span class="isk-val">Genjah</span><div class="isk-label">Varietas</div></div>
+  </div>
+
+  <div class="wrap-monitor">
+    <div class="monitor-tip">
+      💡 Ketuk <strong>✓ lingkaran</strong> di kanan untuk tandai baris selesai. Ketuk <strong>kotak pohon</strong> untuk tandai pohon mati (✕).
+    </div>
+    <div class="daftar-baris" id="daftarBaris"></div>
+    <button class="reset-btn" id="resetBtn">⟳ Reset semua data kebun</button>
+    <p class="catatan-bawah">Data tersimpan otomatis di perangkat ini · Tidak perlu internet</p>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════
+     PAGE 3 — LAPORAN
+════════════════════════════ -->
+<div class="page" id="page-laporan">
+
+  <div class="lap-masthead">
+    <div class="mm-tag" style="color:var(--merah3);">📊 Laporan Progres Kebun</div>
+    <h2>Kelapa Genjah · Kaltim</h2>
+    <p>Bahula Tani Nusantara · <span id="lapTanggal">—</span></p>
+  </div>
+
+  <div class="lap-wrap">
+
+    <div class="lap-summary">
+      <div class="ls-inner">
+        <div class="ls-tag">Progress Keseluruhan</div>
+        <span class="ls-pct" id="lapPct">0%</span>
+        <div class="ls-desc" id="lapDesc">Belum ada baris yang selesai</div>
+        <div class="ls-grid">
+          <div class="ls-cell">
+            <span class="lsn" id="lapBaris">0/10</span>
+            <div class="lsl">Baris selesai</div>
+          </div>
+          <div class="ls-cell">
+            <span class="lsn" id="lapHidup">0</span>
+            <div class="lsl">Pohon hidup</div>
+          </div>
+          <div class="ls-cell">
+            <span class="lsn" id="lapMati">0</span>
+            <div class="lsl">Pohon mati</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail -->
+    <div class="lap-tabel">
+      <div class="lt-head">
+        <div>No</div>
+        <div>Baris</div>
+        <div>Hidup</div>
+        <div>Mati</div>
+        <div>Status</div>
+      </div>
+      <div id="lapDetail"></div>
+    </div>
+
+    <button class="share-btn sb-wa" onclick="shareWA()">📤 Kirim Laporan via WhatsApp</button>
+    <button class="share-btn sb-copy" onclick="copyLaporan()">📋 Salin Teks Laporan</button>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     PAGE 4 — POC GUIDE
+════════════════════════════ -->
+<div class="page" id="page-poc">
+
+  <div class="poc-masthead">
+    <div class="mm-tag" style="color:var(--hijau3);">🌿 Panduan Pemupukan</div>
+    <h2>NutraGro untuk<br><em>Kelapa Genjah</em></h2>
+    <p>Aplikasi POC dari bibit sampai berbuah · 12 bulan pertama</p>
+  </div>
+
+  <div class="poc-wrap">
+
+    <!-- Total -->
+    <div class="total-poc">
+      <div class="tp-item">
+        <div class="tp-label">POC Organik</div>
+        <div class="tp-num">120 btl</div>
+        <div class="tp-sub">@ Rp 40K = Rp 4.800.000</div>
+      </div>
+      <div class="tp-item">
+        <div class="tp-label">POC Turbo</div>
+        <div class="tp-num">40 btl</div>
+        <div class="tp-sub">@ Rp 35K = Rp 1.400.000</div>
+      </div>
+      <div class="tp-item">
+        <div class="tp-label">Total Anggaran</div>
+        <div class="tp-num" style="font-size:22px;">Rp 6,2jt</div>
+        <div class="tp-sub">160 botol · 12 bulan</div>
+      </div>
+      <div class="tp-item">
+        <div class="tp-label">Per Pohon / Tahun</div>
+        <div class="tp-num" style="font-size:22px;">Rp 62K</div>
+        <div class="tp-sub">Sangat efisien</div>
+      </div>
+    </div>
+
+    <!-- Fase 1 -->
+    <div class="fase-card">
+      <div class="fase-head f1h">
+        <div class="fh-left">
+          <div class="fh-tag">Fase 1 · Awal Tanam</div>
+          <div class="fh-title">🌱 Adaptasi & Perakaran</div>
+          <div class="fh-hari">Bulan 1–3 · 100 pohon</div>
+        </div>
+        <div class="fh-btl">20 btl<span>NutraGro Organik</span></div>
+      </div>
+      <div class="fase-body">
+        <div class="fb-row"><span class="fl">Kocor akar (100ml/pohon × 3×)</span><span class="fv">12 botol</span></div>
+        <div class="fb-row"><span class="fl">Foliar daun (interval 14 hari × 4×)</span><span class="fv">8 botol</span></div>
+        <div class="fb-row"><span class="fl">Produk</span><span class="fv">NutraGro Organik</span></div>
+        <div class="fase-tip">💡 Bibit baru tanam — dosis lembut. Kocor melingkar 30cm dari batang. Hindari mengenai batang langsung.</div>
+      </div>
+    </div>
+
+    <!-- Fase 2 -->
+    <div class="fase-card">
+      <div class="fase-head f2h">
+        <div class="fh-left">
+          <div class="fh-tag">Fase 2 · Vegetatif</div>
+          <div class="fh-title">🍃 Tumbuh Pelepah</div>
+          <div class="fh-hari">Bulan 4–8 · Pacu pertumbuhan</div>
+        </div>
+        <div class="fh-btl">80 btl<span>Turbo + Organik</span></div>
+      </div>
+      <div class="fase-body">
+        <div class="fb-row"><span class="fl">Kocor Turbo (150ml/pohon × 6×)</span><span class="fv">30 btl Turbo</span></div>
+        <div class="fb-row"><span class="fl">Foliar Organik (interval 10 hari)</span><span class="fv">50 btl Organik</span></div>
+        <div class="fb-row"><span class="fl">Interval kocor</span><span class="fv">3 minggu sekali</span></div>
+        <div class="fase-tip">💡 Fase kritis pertumbuhan. NutraGro Turbo untuk N tinggi pacu pelepah. Foliar Organik untuk keseimbangan P-K dan imunitas.</div>
+      </div>
+    </div>
+
+    <!-- Fase 3 -->
+    <div class="fase-card">
+      <div class="fase-head f3h">
+        <div class="fh-left">
+          <div class="fh-tag">Fase 3 · Generatif</div>
+          <div class="fh-title">🥥 Menuju Berbuah</div>
+          <div class="fh-hari">Bulan 9–12 · Persiapan bunga & buah</div>
+        </div>
+        <div class="fh-btl">60 btl<span>NutraGro Organik</span></div>
+      </div>
+      <div class="fase-body">
+        <div class="fb-row"><span class="fl">Kocor Organik (200ml/pohon × 4×)</span><span class="fv">40 btl Organik</span></div>
+        <div class="fb-row"><span class="fl">Foliar Organik (interval 14 hari)</span><span class="fv">20 btl Organik</span></div>
+        <div class="fb-row"><span class="fl">NutraGro Turbo</span><span class="fv">STOP — fokus buah</span></div>
+        <div class="fase-tip">💡 Hentikan Turbo. N tinggi menghambat pembentukan bunga. Full Organik untuk kualitas buah dan rendemen minyak kelapa.</div>
+      </div>
+    </div>
+
+    <div class="info-box kuning">
+      ⚠️ Dosis untuk 100 pohon kelapa genjah. Sesuaikan proporsional jika jumlah pohon berbeda. Kocor pagi hari, foliar sebelum jam 09.00.
+    </div>
+
+    <div class="cta-merah" style="margin-bottom:16px;">
+      <h3>Pesan NutraGro</h3>
+      <p>Stok 450 botol ready. Dikirim ke Kaltim H+2 setelah pembayaran dikonfirmasi.</p>
+      <a class="cta-btn" href="https://wa.me/6283871666136?text=Halo%20BTN%2C%20saya%20mau%20pesan%20NutraGro%20untuk%20kelapa%20genjah%20Kaltim">
+        🛒 Pesan via WhatsApp
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const KEY = 'btn_kelapa_merahputih_v1';
+  const BARIS = 10, POHON = 10;
+
+  function load() {
+    try { const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); } catch(e){}
+    return null;
+  }
+
+  function initData() {
+    return { baris: Array.from({length:BARIS}, () => ({ selesai:false, pohon:Array(POHON).fill('hidup') })) };
+  }
+
+  let data = load() || initData();
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){} }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._tt);
+    window._tt = setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  // ── NAVIGASI ──
+  window.pindah = function(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('aktif'));
+    document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('aktif'));
+    document.getElementById('page-' + id).classList.add('aktif');
+    btn.classList.add('aktif');
+    window.scrollTo(0,0);
+    if(id === 'laporan') renderLaporan();
+  };
+
+  // ── RENDER MONITORING ──
+  function render() {
+    const cont = document.getElementById('daftarBaris');
+    if(!cont) return;
+    cont.innerHTML = '';
+
+    let bs = 0, hidup = 0, mati = 0;
+
+    data.baris.forEach((b, bi) => {
+      if(b.selesai) bs++;
+      b.pohon.forEach(p => p === 'mati' ? mati++ : hidup++);
+
+      const matiB = b.pohon.filter(p=>p==='mati').length;
+      const status = matiB > 0
+        ? `Baris ${bi+1} · ${matiB} pohon mati`
+        : b.selesai ? `Baris ${bi+1} · selesai ✓` : `Baris ${bi+1}`;
+
+      const card = document.createElement('div');
+      card.className = 'baris-card' + (b.selesai ? ' selesai' : '');
+      card.innerHTML = `
+        <div class="baris-head">
+          <div class="baris-nomor">${bi+1}</div>
+          <div class="baris-status">${status}</div>
+          <div class="ceklis-bulat ${b.selesai ? 'aktif':''}" data-c="${bi}">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+        </div>
+        <div class="pohon-grid">
+          ${b.pohon.map((p,pi) => `
+            <div class="pohon-sel ${p==='mati'?'mati-sel':'hidup-sel'}" data-p="${bi}-${pi}">
+              <span>${pi+1}</span>
+            </div>`).join('')}
+        </div>
+        <div class="legenda">
+          <span><i class="i-tumbuh"></i>Hidup</span>
+          <span><i class="i-mati"></i>Mati</span>
+        </div>`;
+      cont.appendChild(card);
+    });
+
+    // Update stats
+    const pct = Math.round((bs/BARIS)*100);
+    const set = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+    set('angkaBaris', `${bs}/${BARIS}`);
+    set('angkaHidup', hidup);
+    set('angkaMati', mati);
+    set('angkaPct', pct+'%');
+    const f = document.getElementById('fillBaris');
+    if(f) f.style.width = pct+'%';
+
+    // Events
+    cont.querySelectorAll('[data-c]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        const i = +el.dataset.c;
+        data.baris[i].selesai = !data.baris[i].selesai;
+        save(); render();
+        if(data.baris[i].selesai) showToast(`Baris ${i+1} selesai ✓`);
+      });
+    });
+
+    cont.querySelectorAll('[data-p]').forEach(el => {
+      el.addEventListener('click', () => {
+        const [bi,pi] = el.dataset.p.split('-').map(Number);
+        data.baris[bi].pohon[pi] = data.baris[bi].pohon[pi]==='mati'?'hidup':'mati';
+        save(); render();
+      });
+    });
+  }
+
+  // ── LAPORAN ──
+  function renderLaporan() {
+    let bs=0, hidup=0, mati=0;
+    data.baris.forEach(b => {
+      if(b.selesai) bs++;
+      b.pohon.forEach(p => p==='mati'?mati++:hidup++);
+    });
+    const pct = Math.round((bs/BARIS)*100);
+    const tgl = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+
+    const set = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+    set('lapTanggal', tgl);
+    set('lapPct', pct+'%');
+    set('lapBaris', `${bs}/${BARIS}`);
+    set('lapHidup', hidup);
+    set('lapMati', mati);
+    set('lapDesc',
+      bs===0 ? 'Belum ada baris yang selesai' :
+      bs===BARIS ? '✅ Semua baris selesai dikerjakan!' :
+      `${bs} dari ${BARIS} baris selesai dikerjakan`
+    );
+
+    const det = document.getElementById('lapDetail');
+    if(det) {
+      det.innerHTML = data.baris.map((b,i) => {
+        const h = b.pohon.filter(p=>p==='hidup').length;
+        const m = b.pohon.filter(p=>p==='mati').length;
+        return `
+          <div class="lt-row">
+            <div class="lt-num">${i+1}</div>
+            <div>Baris ${i+1}</div>
+            <div style="color:var(--hijau2);font-weight:700;">${h}</div>
+            <div style="color:${m>0?'var(--merah)':'var(--teks3)'};font-weight:${m>0?700:400};">${m}</div>
+            <div>${b.selesai ? '<span style="color:var(--merah);font-weight:700;">✓</span>' : '<span style="color:var(--teks3);">—</span>'}</div>
+          </div>`;
+      }).join('');
+    }
+  }
+
+  function buatTeks() {
+    let bs=0, hidup=0, mati=0;
+    data.baris.forEach(b => {
+      if(b.selesai) bs++;
+      b.pohon.forEach(p => p==='mati'?mati++:hidup++);
+    });
+    const pct = Math.round((bs/BARIS)*100);
+    const tgl = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+
+    let t = `🌴 *LAPORAN KEBUN KELAPA GENJAH*\n`;
+    t += `📍 BTN · Kaltim · IKN Corridor\n`;
+    t += `📅 ${tgl}\n\n`;
+    t += `📊 *Progress: ${pct}%*\n`;
+    t += `✅ Baris selesai: ${bs}/${BARIS}\n`;
+    t += `🌿 Pohon hidup: ${hidup}/100\n`;
+    t += `✕ Pohon mati: ${mati}\n\n`;
+    t += `*Detail per baris:*\n`;
+    data.baris.forEach((b,i) => {
+      const h = b.pohon.filter(p=>p==='hidup').length;
+      const m = b.pohon.filter(p=>p==='mati').length;
+      t += `Baris ${i+1}: ${h} hidup${m>0?' · '+m+' mati':''}${b.selesai?' ✓':''}\n`;
+    });
+    t += `\n_Dipantau via BTN Agro Platform_\n`;
+    t += `📞 083871666136 · Bahula Tani Nusantara`;
+    return t;
+  }
+
+  window.shareWA = () => window.open('https://wa.me/?text='+encodeURIComponent(buatTeks()),'_blank');
+  window.copyLaporan = () => {
+    navigator.clipboard.writeText(buatTeks())
+      .then(() => showToast('Laporan disalin ✓'))
+      .catch(() => showToast('Gagal menyalin'));
+  };
+
+  document.getElementById('resetBtn')?.addEventListener('click', () => {
+    if(confirm('Reset semua data kebun dari awal?')) {
+      data = initData(); save(); render();
+      showToast('Data direset');
+    }
+  });
+
+  // Init
+  render();
+  const td = document.getElementById('lapTanggal');
+  if(td) td.textContent = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+
+})();
+</script>
+</body>
+</html>
